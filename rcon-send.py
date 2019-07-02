@@ -9,6 +9,8 @@ def init_args():
     parser = argparse.ArgumentParser(
             description='send command using rcon protocol'
             )
+    parser.add_argument('address')
+    parser.add_argument('port')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--file')
     group.add_argument('--command')
@@ -83,7 +85,7 @@ def main():
     args = init_args()
     password = getpass.getpass()
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect(('127.0.0.1', 25575))
+        sock.connect((args.address, int(args.port)))
         data_id = random.randint(0x00000000, 0xFFFFFFFE)
         data = None
 
