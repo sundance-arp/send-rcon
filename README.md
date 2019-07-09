@@ -1,4 +1,4 @@
-# send_rcon
+# send-rcon
 This program sends commands using the [Source RCON Protocol](https://developer.valvesoftware.com/wiki/Source_RCON_Protocol).
 
 An example of a supported game is minecraft.
