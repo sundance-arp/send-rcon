@@ -6,9 +6,7 @@ import argparse
 
 
 def init_args():
-    parser = argparse.ArgumentParser(
-            description='send command using rcon protocol'
-            )
+    parser = argparse.ArgumentParser(description='send command using rcon protocol')
     parser.add_argument('address')
     parser.add_argument('port')
     group = parser.add_mutually_exclusive_group(required=True)
