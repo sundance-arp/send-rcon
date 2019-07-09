@@ -20,3 +20,7 @@ optional arguments:
   --command COMMAND
 ```
 
+You can create programs using functions as well as commands. For example like this `wakitsubushi.py`.
+
+This script can prevent monsters from being generated.
+
