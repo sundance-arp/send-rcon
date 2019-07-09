@@ -6,7 +6,7 @@ An example of a supported game is minecraft.
 ## Usage
 Command line help is shown below.
 ```
-usage: rcon-send.py [-h] (--file FILE | --command COMMAND) address port
+usage: send_rcon.py [-h] (--file FILE | --command COMMAND) address port
 
 send command using rcon protocol
 
