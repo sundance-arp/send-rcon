@@ -3,7 +3,6 @@ import socket
 import getpass
 import random
 import argparse
-import sys
 
 import send_rcon
 
