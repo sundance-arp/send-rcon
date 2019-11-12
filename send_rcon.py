@@ -3,6 +3,7 @@ import socket
 import getpass
 import random
 import argparse
+import ssl
 
 
 def init_args():
@@ -82,7 +83,11 @@ def print_response(data):
 def main():
     args = init_args()
     password = getpass.getpass()
+    context= ssl.create_default_context()
+    context.check_hostname = False
+    context.verify_mode = ssl.CERT_NONE
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock = context.wrap_socket(sock, server_side=False, server_hostname='localhost')
         sock.connect((args.address, int(args.port)))
         data_id = random.randint(0x00000000, 0xFFFFFFFE)
         data = None
