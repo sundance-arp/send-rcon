@@ -8,13 +8,13 @@ import ssl
 
 def init_args():
     parser = argparse.ArgumentParser(description='send command using rcon protocol')
-    parser.add_argument('address')
-    parser.add_argument('port')
-    parser.add_argument('--tls', action='store_true')
-    parser.add_argument('--skip-tls-verify', action='store_true')
+    parser.add_argument('address',help="target host address")
+    parser.add_argument('port',help="target host port")
+    parser.add_argument('--tls', action='store_true', help="enable tls")
+    parser.add_argument('--skip-tls-verify', action='store_true',help="skip tls verify")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('--file')
-    group.add_argument('--command')
+    group.add_argument('--file',help="use command file")
+    group.add_argument('--command', help="command to execute")
     args = parser.parse_args()
     return args
 
@@ -93,8 +93,6 @@ def print_response(data):
 def main():
     args = init_args()
     password = getpass.getpass()
-    # 進捗: socatを通してTLSソケットでのコマンド実行が可能になった
-    # TODO: TLSオプションが有効か否か
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         if args.tls:
             sock = create_tls_socket(args, sock)
