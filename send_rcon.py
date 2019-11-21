@@ -10,11 +10,21 @@ def init_args():
     parser = argparse.ArgumentParser(description='send command using rcon protocol')
     parser.add_argument('address')
     parser.add_argument('port')
+    parser.add_argument('--tls', action='store_true')
+    parser.add_argument('--skip-tls-verify', action='store_true')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--file')
     group.add_argument('--command')
     args = parser.parse_args()
     return args
+
+
+def create_tls_socket(args, sock):
+    context = ssl.create_default_context()
+    context.check_hostname = False
+    if args.skip_tls_verify:
+        context.verify_mode = ssl.CERT_NONE
+    return context.wrap_socket(sock, server_side=False, server_hostname=args.address)
 
 
 def execute_command(sock, data_id, command):
@@ -83,23 +93,20 @@ def print_response(data):
 def main():
     args = init_args()
     password = getpass.getpass()
-    context= ssl.create_default_context()
-    context.check_hostname = False
-    context.verify_mode = ssl.CERT_NONE
+    # 進捗: socatを通してTLSソケットでのコマンド実行が可能になった
+    # TODO: TLSオプションが有効か否か
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock = context.wrap_socket(sock, server_side=False, server_hostname='localhost')
+        if args.tls:
+            sock = create_tls_socket(args, sock)
         sock.connect((args.address, int(args.port)))
         data_id = random.randint(0x00000000, 0xFFFFFFFE)
         data = None
-
         payload = construct_auth(data_id, password)
         data = send_rcon(sock, payload)
         if not is_authentication_success(data_id, data):
             print("Authentication failed.")
             exit(1)
-        print("Authentication succeeded.")
-
-        print('')
+        print("Authentication succeeded.\n")
 
         if args.file is None:
             execute_command(sock, data_id, args.command)
