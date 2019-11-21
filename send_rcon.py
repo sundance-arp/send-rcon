@@ -8,12 +8,12 @@ import ssl
 
 def init_args():
     parser = argparse.ArgumentParser(description='send command using rcon protocol')
-    parser.add_argument('address',help="target host address")
-    parser.add_argument('port',help="target host port")
+    parser.add_argument('address', help="target host address")
+    parser.add_argument('port', help="target host port")
     parser.add_argument('--tls', action='store_true', help="enable tls")
-    parser.add_argument('--skip-tls-verify', action='store_true',help="skip tls verify")
+    parser.add_argument('--skip-tls-verify', action='store_true', help="skip tls verify")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('--file',help="use command file")
+    group.add_argument('--file', help="use command file")
     group.add_argument('--command', help="command to execute")
     args = parser.parse_args()
     return args
