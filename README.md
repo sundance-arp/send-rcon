@@ -7,7 +7,7 @@ An example of a supported game is minecraft.
 Command line help is shown below.
 ```
 $ ./send_rcon.py --help
-usage: send_rcon.py [-h] [--tls] [--skip-tls-verify]
+usage: send_rcon.py [-h] [--tls] [--ca-cert CA_CERT] [--skip-tls-verify]
                     (--file FILE | --command COMMAND)
                     address port
 
@@ -20,6 +20,7 @@ positional arguments:
 optional arguments:
   -h, --help         show this help message and exit
   --tls              enable tls
+  --ca-cert CA_CERT  ca certificate file
   --skip-tls-verify  skip tls verify
   --file FILE        use command file
   --command COMMAND  command to execute
