@@ -11,6 +11,7 @@ def init_args():
     parser.add_argument('address', help="target host address")
     parser.add_argument('port', help="target host port")
     parser.add_argument('--tls', action='store_true', help="enable tls")
+    parser.add_argument('--ca-cert', type=str, help="ca certificate file")
     parser.add_argument('--skip-tls-verify', action='store_true', help="skip tls verify")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--file', help="use command file")
@@ -24,6 +25,8 @@ def create_tls_socket(args, sock):
     context.check_hostname = False
     if args.skip_tls_verify:
         context.verify_mode = ssl.CERT_NONE
+    elif args.ca_cert:
+        context.load_verify_locations(cafile=args.ca_cert)
     return context.wrap_socket(sock, server_side=False, server_hostname=args.address)
 
 
