@@ -13,6 +13,8 @@ def init_args():
     parser.add_argument('--tls', action='store_true', help="enable tls")
     parser.add_argument('--ca-cert', type=str, help="ca certificate file")
     parser.add_argument('--skip-tls-verify', action='store_true', help="skip tls verify")
+    parser.add_argument('--client-cert', type=str, help="client certificate file")
+    parser.add_argument('--client-key', type=str, help="client key file")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--file', help="use command file")
     group.add_argument('--command', help="command to execute")
@@ -23,10 +25,16 @@ def init_args():
 def create_tls_socket(args, sock):
     context = ssl.create_default_context()
     context.check_hostname = False
+    context.verify_mode = ssl.CERT_REQUIRED
     if args.skip_tls_verify:
         context.verify_mode = ssl.CERT_NONE
-    elif args.ca_cert:
+    elif args.ca_cert != None:
         context.load_verify_locations(cafile=args.ca_cert)
+    if (args.client_cert == None) ^ (args.client_key == None):
+        print('You must specify both "--client-cert" and "--client-key".')
+        exit(1)
+    elif (args.client_cert != None) & (args.client_key != None):
+        context.load_cert_chain(certfile=args.client_cert, keyfile=args.client_key)
     return context.wrap_socket(sock, server_side=False, server_hostname=args.address)
 
 
